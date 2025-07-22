@@ -1,0 +1,13 @@
+
+services:
+  telephony-gateway:
+    image: ${DOCKER_REGISTRY:-ghcr.io/sentiric}/sentiric-telephony-gateway-service:${TAG:-latest}
+    build: { context: . }
+    container_name: sentiric_telephony_gateway
+    env_file: [./.env]
+    # Bu servis özel donanımlara erişim gerektirebilir
+    # devices:
+    #   - "/dev/dahdi:/dev/dahdi"
+    networks: [sentiric-net]
+    restart: unless-stopped
+# ... (networks tanımı)
