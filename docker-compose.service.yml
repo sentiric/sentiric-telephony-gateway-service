@@ -1,13 +1,32 @@
+networks:
+  sentiric-net:
+    name: ${NETWORK_NAME:-sentiric-net}
+    driver: bridge
 
 services:
-  telephony-gateway:
-    image: ${DOCKER_REGISTRY:-ghcr.io/sentiric}/sentiric-telephony-gateway-service:${TAG:-latest}
-    build: { context: . }
-    container_name: sentiric_telephony_gateway
-    env_file: [./.env]
-    # Bu servis özel donanımlara erişim gerektirebilir
-    # devices:
-    #   - "/dev/dahdi:/dev/dahdi"
-    networks: [sentiric-net]
-    restart: unless-stopped
-# ... (networks tanımı)
+  telephony-gateway:       
+
+      build:
+        context: .
+        dockerfile: Dockerfile
+        args:
+          SERVICE_NAME: sentiric-task-service
+
+      env_file: 
+        - ./.env
+
+      # volumes:
+      #   - ../sentiric-infrastructure/tls/certs:/etc/sentiric/tls:ro
+      # devices:
+      #   - "/dev/dahdi:/dev/dahdi"
+      # ports:
+      #   - "${TELEPHONY_GATEWAY_SERVICE_PORT}:${TELEPHONY_GATEWAY_SERVICE_PORT}"
+
+      networks:
+        - sentiric-net
+      
+      profiles:
+        - default
+        - ai
+
+      restart: always
