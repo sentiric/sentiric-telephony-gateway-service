@@ -12,7 +12,7 @@
 *   Specialized telephony libraries or direct hardware interfaces.
 
 **API Interactions (As a Protocol Bridge):**
-*   Communicates directly with `sentiric-sip-server` (via SIP protocol for converted calls).
+*   Communicates directly with `sentiric-sip-gateway-service` (via SIP protocol for converted calls) or `sentiric-sip-signaling-service`.
 *   Interacts with external telecommunication networks/hardware.
 
 **Local Development:**

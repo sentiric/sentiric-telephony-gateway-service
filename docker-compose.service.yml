@@ -1,32 +1,31 @@
-networks:
-  sentiric-net:
-    name: ${NETWORK_NAME:-sentiric-net}
-    driver: bridge
+version: '3.8'
 
 services:
-  telephony-gateway:       
+  telephony-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: sentiric-telephony-gateway-service
 
-      build:
-        context: .
-        dockerfile: Dockerfile
-        args:
-          SERVICE_NAME: sentiric-task-service
+    env_file:
+      - .env
 
-      env_file: 
-        - ./.env
+    ports:
+      - "${TELEPHONY_GATEWAY_SERVICE_PORT}:8080"
 
-      # volumes:
-      #   - ../sentiric-infrastructure/tls/certs:/etc/sentiric/tls:ro
-      # devices:
-      #   - "/dev/dahdi:/dev/dahdi"
-      # ports:
-      #   - "${TELEPHONY_GATEWAY_SERVICE_PORT}:${TELEPHONY_GATEWAY_SERVICE_PORT}"
+    devices:
+      - "/dev/dahdi:/dev/dahdi"
 
-      networks:
-        - sentiric-net
-      
-      profiles:
-        - default
-        - ai
+    networks:
+      - sentiric-net
 
-      restart: always
+    restart: always
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+
+networks:
+  sentiric-net:
+    name: sentiric-net
+    driver: bridge
